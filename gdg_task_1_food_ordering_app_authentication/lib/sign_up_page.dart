@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_task_1_food_ordering_app/home_screen.dart';
+import 'package:gdg_task_1_food_ordering_app/services/auth_service.dart';
 import 'package:gdg_task_1_food_ordering_app/sign_in_page.dart';
 class SignUpPage extends StatefulWidget {
   const SignUpPage({ super.key });
@@ -11,7 +12,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey =  GlobalKey<FormState>();
-
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,28 +42,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('Full Name'),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border:OutlineInputBorder(),
-                              hintText: 'Enter Your Full Name'
-                            ),
-                            validator: (value){
-                              return null;
-                            },
-                          ),
-                          Text('Password'),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border:OutlineInputBorder(),
-                              hintText: 'Enter Your Password'
-                            ),
-                            validator: (value){
-                              return null;
-                            },
-                          ),
                           Text('Email'),
                           TextFormField(
+                            controller: _emailController,
                             decoration: InputDecoration(
                               border:OutlineInputBorder(),
                               hintText: 'Enter Your Email'
@@ -70,27 +53,26 @@ class _SignUpPageState extends State<SignUpPage> {
                               return null;
                             },
                           ),
-                          Text('Phone Number'),
+                          Text('Password'),
                           TextFormField(
+                            controller: _passwordController,
                             decoration: InputDecoration(
                               border:OutlineInputBorder(),
-                              hintText: 'Enter Your Phone Number'
+                              hintText: 'Enter Your Password'
                             ),
                             validator: (value){
                               return null;
                             },
                           ),
-
-
                           SizedBox(
                             width: double.infinity,
-                            child: FilledButton(onPressed: (){
-                            Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                                  );
+                            child: FilledButton(
+                            onPressed: () async{
+                            await AuthService().signup(email: _emailController.text, password: _passwordController.text);
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=> const HomeScreen()));
                                                 }, child: Text("Sign Up")),
                           )
-                        ],
+                        ], 
                       ),
                     )
                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_task_1_food_ordering_app/home_screen.dart';
+import 'package:gdg_task_1_food_ordering_app/services/auth_service.dart';
 import 'package:gdg_task_1_food_ordering_app/sign_up_page.dart';
 class SignInPage extends StatefulWidget {
   const SignInPage({ super.key });
@@ -11,6 +12,9 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
 return Scaffold(
@@ -41,6 +45,7 @@ return Scaffold(
                         children: [
                           Text('Email'),
                           TextFormField(
+                            controller: _emailController,
                             decoration: InputDecoration(
                               border:OutlineInputBorder(),
                               hintText: 'Enter Your Email'
@@ -51,6 +56,7 @@ return Scaffold(
                           ),
                           Text('Password'),
                           TextFormField(
+                            controller: _passwordController,
                             decoration: InputDecoration(
                               border:OutlineInputBorder(),
                               hintText: 'Enter Your Password'
@@ -62,11 +68,10 @@ return Scaffold(
                           SizedBox(
                             width: double.infinity,
                             child: FilledButton(
-                              onPressed: (){
-                            Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                                );
-                                              }, child: Text("Sign In")),
+                              onPressed: () async{
+                            await AuthService().signin(email: _emailController.text, password: _passwordController.text);
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=> const HomeScreen()));}
+                               ,child: Text("Sign In")),
                           )
                         ],
                       ),
